@@ -1,10 +1,10 @@
 const chaosFnUtility = require('azure-chaos-fn');
-const webSiteManagementClient = require('azure-arm-website');
+const logicManagement = require('azure-arm-logic');
 
-function stopWebSite(credential, subscriptionId, resourceGroupName, resourceName, logger) {
-    const client = new webSiteManagementClient(credential, subscriptionId);
-    logger(`Stopping web app ${resourceName} in resource group ${resourceGroupName}`);
-    return client.webApps.stop(
+function stopLogicApp(credential, subscriptionId, resourceGroupName, resourceName, logger){
+    const client = new logicManagement(credential, subscriptionId);
+    logger(`Stopping logic app ${resourceName} in resource gorup ${resourceGroupName}`);
+    return client.workflows.disable(
         resourceGroupName,
         resourceName
     );
@@ -13,10 +13,10 @@ function stopWebSite(credential, subscriptionId, resourceGroupName, resourceName
 module.exports = function (context, req) {
     context.log('Beginning start of chaos event');
 
-    context.log('Stopping websites');
+    context.log('Stopping logic app');
     const credential = chaosFnUtility.parsers.accessTokenToCredentials(req);
     const resources = chaosFnUtility.parsers.resourcesToObjects(req);
-    Promise.all(resources.map(resource => stopWebSite(
+    Promise.all(resources.map(resource => stopLogicApp(
             credential,
             resource.subscriptionId,
             resource.resourceGroupName,
@@ -24,11 +24,11 @@ module.exports = function (context, req) {
             context.log
     )))
         .then(() => {
-            context.log('Completed stopping websites');
+            context.log('Completed disabling logic app');
             context.done();
         })
         .catch(err => {
-            context.log('Error stopping websites');
+            context.log('Error disableing logic app');
             context.log(err);
             context.done();
         });
