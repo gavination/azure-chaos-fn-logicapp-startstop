@@ -28,7 +28,7 @@ module.exports = function (context, req) {
             context.done();
         })
         .catch(err => {
-            context.log('Error disableing logic app');
+            context.log('Error disabling logic app');
             context.log(err);
             context.done();
         });
