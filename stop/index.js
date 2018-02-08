@@ -1,10 +1,10 @@
 const chaosFnUtility = require('azure-chaos-fn');
-const webSiteManagementClient = require('azure-arm-website');
+const logicManagement = require('azure-arm-logic');
 
-function startWebSite(credential, subscriptionId, resourceGroupName, resourceName, logger) {
-    const client = new webSiteManagementClient(credential, subscriptionId);
-    logger(`Starting web app ${resourceName} in resource group ${resourceGroupName}`);
-    return client.webApps.start(
+function startLogicApp(credential, subscriptionId, resourceGroupName, resourceName, logger) {
+    const client = new logicManagement(credential, subscriptionId);
+    logger(`Starting logic app ${resourceName} in resource group ${resourceGroupName}`);
+    return client.workflows.start(
         resourceGroupName,
         resourceName
     );
@@ -13,10 +13,10 @@ function startWebSite(credential, subscriptionId, resourceGroupName, resourceNam
 module.exports = function (context, req) {
     context.log('Beginning stop of chaos event');
 
-    context.log('Starting websites');
+    context.log('Starting Logic App');
     const credential = chaosFnUtility.parsers.accessTokenToCredentials(req);
     const resources = chaosFnUtility.parsers.resourcesToObjects(req);
-    Promise.all(resources.map(resource => startWebSite(
+    Promise.all(resources.map(resource => startLogicApp(
             credential,
             resource.subscriptionId,
             resource.resourceGroupName,
@@ -24,11 +24,11 @@ module.exports = function (context, req) {
             context.log
     )))
         .then(() => {
-            context.log('Completed starting websites');
+            context.log('Completed starting Logic App');
             context.done();
         })
         .catch(err => {
-            context.log('Error starting websites');
+            context.log('Error starting Logic App');
             context.log(err);
             context.done();
         });
