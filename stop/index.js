@@ -4,7 +4,7 @@ const logicManagement = require('azure-arm-logic');
 function startLogicApp(credential, subscriptionId, resourceGroupName, resourceName, logger) {
     const client = new logicManagement(credential, subscriptionId);
     logger(`Starting logic app ${resourceName} in resource group ${resourceGroupName}`);
-    return client.workflows.start(
+    return client.workflows.enable(
         resourceGroupName,
         resourceName
     );
