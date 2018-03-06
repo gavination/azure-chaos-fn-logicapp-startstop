@@ -3,7 +3,7 @@ const logicManagement = require('azure-arm-logic');
 
 function stopLogicApp(credential, subscriptionId, resourceGroupName, resourceName, logger){
     const client = new logicManagement(credential, subscriptionId);
-    logger(`Stopping logic app ${resourceName} in resource gorup ${resourceGroupName}`);
+    logger(`Stopping logic app ${resourceName} in resource group ${resourceGroupName}`);
     return client.workflows.disable(
         resourceGroupName,
         resourceName
