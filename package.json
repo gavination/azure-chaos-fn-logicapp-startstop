@@ -6,7 +6,8 @@
   "dependencies": {
     "azure-arm-logic": "^1.1.0-preview",
     "azure-arm-website": "^3.0.0-preview",
-    "azure-chaos-fn": "^2.0.0"
+    "azure-chaos-fn": "^2.0.0",
+    "npm": "^6.0.1"
   },
   "devDependencies": {},
   "scripts": {
